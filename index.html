@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Sayangg! 🎂💖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary-pink: #ff6b8b;
+      --soft-pink: #ffeef2;
+      --deep-rose: #d6336c;
+      --pastel-bg: #fff0f5;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --gold-accent: #e5a93c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #ffd1dc 0%, #ffe6eb 50%, #fcd5ce 100%);
+      color: #4a4a4a;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating Hearts Background */
+    .heart-bg {
+      position: fixed;
+      top: -20px;
+      font-size: 20px;
+      user-select: none;
+      pointer-events: none;
+      animation: fall linear infinite;
+      z-index: 0;
+      opacity: 0.65;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(105vh) rotate(360deg);
+      }
+    }
+
+    /* Screen 1: Amplop Interaktif */
+    #envelope-screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle, #fff0f3 0%, #fbc4d1 100%);
+      z-index: 999;
+      transition: opacity 0.8s ease, visibility 0.8s;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .envelope-box {
+      position: relative;
+      width: 290px;
+      height: 200px;
+      background: #ff758f;
+      border-radius: 12px;
+      box-shadow: 0 18px 40px rgba(255, 107, 139, 0.35);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .envelope-box:hover {
+      transform: scale(1.04);
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 145px solid transparent;
+      border-right: 145px solid transparent;
+      border-top: 110px solid #f75c7a;
+      transform-origin: top;
+      transition: transform 0.6s ease;
+      z-index: 2;
+    }
+
+    .envelope-seal {
+      position: absolute;
+      width: 58px;
+      height: 58px;
+      background: linear-gradient(135deg, #e63946, #c1121f);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 26px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 3;
+      border: 2px dashed rgba(255, 255, 255, 0.6);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .tap-hint {
+      margin-top: 28px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #c9184a;
+      letter-spacing: 0.5px;
+      animation: bounce 1.8s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    /* Floating Music Control Bar */
+    .music-bar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(8px);
+      padding: 10px 18px;
+      border-radius: 50px;
+      box-shadow: 0 8px 25px rgba(255, 107, 139, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(255, 182, 193, 0.6);
+      transition: all 0.3s;
+    }
+
+    .disc-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(45deg, #2b2b2b, #4b4b4b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff6b8b;
+      font-size: 14px;
+      animation: spin 3s linear infinite;
+      animation-play-state: paused;
+      border: 2px solid #ffccd5;
+    }
+
+    .disc-icon.playing {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    .music-btn {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: #d6336c;
+      transition: transform 0.2s;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.2);
+    }
+
+    /* Main Container */
+    .main-wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 30px 20px 100px;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .main-wrapper.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Header Section */
+    .header-card {
+      text-align: center;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      padding: 36px 24px;
+      border-radius: 28px;
+      box-shadow: 0 12px 35px rgba(255, 126, 155, 0.18);
+      border: 2px solid #fff5f7;
+      margin-bottom: 35px;
+    }
+
+    .date-badge {
+      display: inline-block;
+      background: #ffccd5;
+      color: #a4133c;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 6px 18px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+
+    h1.hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 2.9rem);
+      color: #c9184a;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+      font-family: 'Caveat', cursive;
+      font-size: 1.65rem;
+      color: #ff4d6d;
+    }
+
+    /* Tiup Lilin Interaktif Versi Estetik (Deluxe Cake) */
+    .cake-section-deluxe {
+      text-align: center;
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      padding: 38px 24px 32px;
+      border-radius: 28px;
+      margin-bottom: 35px;
+      box-shadow: 0 12px 35px rgba(255, 107, 139, 0.16);
+      border: 2px dashed #ffb3c1;
+      position: relative;
+    }
+
+    .cake-title {
+      font-family: 'Playfair Display', serif;
+      color: #a4133c;
+      font-size: 1.7rem;
+      margin-bottom: 6px;
+    }
+
+    .cake-desc {
+      font-size: 0.95rem;
+      color: #6a040f;
+      margin-bottom: 22px;
+    }
+
+    /* Panggung Kue */
+    .deluxe-cake-stage {
+      position: relative;
+      width: 220px;
+      height: 180px;
+      margin: 0 auto 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      transition: transform 0.25s ease;
+    }
+
+    .deluxe-cake-stage:hover {
+      transform: scale(1.04);
+    }
+
+    /* Piring Kue */
+    .plate {
+      position: absolute;
+      bottom: 0;
+      width: 220px;
+      height: 14px;
+      background: #e9ecef;
+      border-radius: 10px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+      border: 1px solid #dee2e6;
+    }
+
+    /* Lapisan Kue Bawah */
+    .layer-bottom {
+      position: absolute;
+      bottom: 12px;
+      width: 170px;
+      height: 60px;
+      background: linear-gradient(to right, #ff8fa3, #ff4d6d, #ff8fa3);
+      border-radius: 12px 12px 4px 4px;
+      box-shadow: inset 0 -4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    /* Lapisan Kue Atas */
+    .layer-top {
+      position: absolute;
+      bottom: 70px;
+      width: 120px;
+      height: 48px;
+      background: linear-gradient(to right, #ffb3c1, #ff758f, #ffb3c1);
+      border-radius: 10px 10px 4px 4px;
+      box-shadow: inset 0 -4px 6px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: center;
+      overflow: visible;
+    }
+
+    /* Krim Leleh (Icing & Drips) */
+    .icing {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 14px;
+      background: #ffffff;
+      border-radius: 10px 10px 6px 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      z-index: 2;
+    }
+
+    .drip {
+      position: absolute;
+      top: 10px;
+      width: 12px;
+      background: #ffffff;
+      border-radius: 0 0 8px 8px;
+      z-index: 2;
+    }
+
+    .drip1 { left: 28px; height: 16px; }
+    .drip2 { left: 78px; height: 22px; }
+    .drip3 { right: 35px; height: 14px; }
+
+    .cherry {
+      position: absolute;
+      top: -14px;
+      font-size: 1.3rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+      z-index: 3;
+    }
+
+    /* Lilin Ulang Tahun */
+    .candle {
+      position: absolute;
+      bottom: 116px;
+      width: 14px;
+      height: 44px;
+      background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ff4d6d 5px, #ff4d6d 10px);
+      border-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      z-index: 5;
+    }
+
+    /* Api Lilin */
+    .flame {
+      position: absolute;
+      top: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 24px;
+      background: radial-gradient(ellipse at bottom, #fff 10%, #ffbe0b 50%, #fb5607 90%);
+      border-radius: 50% 50% 35% 35%;
+      box-shadow: 0 0 16px #ffbe0b, 0 0 26px #fb5607, 0 0 35px #ff006e;
+      animation: flickerReal 0.6s infinite alternate;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .flame.blown {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.2);
+      pointer-events: none;
+    }
+
+    @keyframes flickerReal {
+      0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+      50% { transform: translateX(-50%) scale(1.08) rotate(1deg); }
+      100% { transform: translateX(-50%) scale(0.95) rotate(3deg); }
+    }
+
+    /* Asap Lilin */
+    .smoke {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      background: rgba(180, 180, 180, 0.7);
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .smoke.active {
+      animation: smokeRise 1.2s forwards ease-out;
+    }
+
+    @keyframes smokeRise {
+      0% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+      50% { opacity: 0.5; transform: translate(-30%, -20px) scale(2.2); }
+      100% { opacity: 0; transform: translate(20%, -40px) scale(3.5); }
+    }
+
+    /* Teks Harapan */
+    .wish-banner {
+      font-size: 1.05rem;
+      color: #800f2f;
+      font-weight: 700;
+      min-height: 28px;
+      margin-top: 6px;
+      transition: all 0.3s ease;
+    }
+
+    /* Tombol Nyalakan Ulang */
+    .relight-btn {
+      display: none;
+      margin: 14px auto 0;
+      background: linear-gradient(135deg, #ff758f, #ff4d6d);
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 77, 109, 0.35);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .relight-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Polaroid Gallery */
+    .gallery-title {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      color: #800f2f;
+      margin-bottom: 25px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .polaroid {
+      background: #ffffff;
+      padding: 14px 14px 22px;
+      border-radius: 6px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+      transition: all 0.35s ease;
+      position: relative;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .polaroid:nth-child(1) { transform: rotate(-3deg); }
+    .polaroid:nth-child(2) { transform: rotate(2deg); }
+    .polaroid:nth-child(3) { transform: rotate(-2deg); }
+
+    .polaroid:hover {
+      transform: scale(1.05) rotate(0deg) !important;
+      box-shadow: 0 16px 32px rgba(255, 77, 109, 0.3);
+      z-index: 10;
+    }
+
+    .tape {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 75px;
+      height: 22px;
+      background: rgba(255, 209, 220, 0.7);
+      backdrop-filter: blur(2px);
+      border: 1px dashed rgba(255, 107, 139, 0.4);
+    }
+
+    .polaroid img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 4px;
+      background: #ffe5ec;
+    }
+
+    .polaroid-caption {
+      font-family: 'Caveat', cursive;
+      font-size: 1.45rem;
+      color: #590d22;
+      margin-top: 14px;
+      font-weight: 700;
+    }
+
+    /* Surat Ucapan Cinta */
+    .letter-card {
+      background: #fffdfa;
+      border: 2px solid #ffccd5;
+      border-radius: 22px;
+      padding: 35px 28px;
+      box-shadow: 0 10px 30px rgba(255, 143, 163, 0.18);
+      position: relative;
+      margin-bottom: 40px;
+      line-height: 1.85;
+      font-size: 1.05rem;
+      color: #4a2828;
+    }
+
+    .letter-card::before {
+      content: "💌";
+      position: absolute;
+      top: -18px;
+      right: 25px;
+      font-size: 32px;
+      background: #fff;
+      padding: 0 8px;
+    }
+
+    .letter-card h3 {
+      font-family: 'Playfair Display', serif;
+      color: #c9184a;
+      font-size: 1.6rem;
+      margin-bottom: 16px;
+    }
+
+    .letter-card p {
+      margin-bottom: 14px;
+    }
+
+    .signature {
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      color: #d6336c;
+      text-align: right;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    /* Reasons Cards */
+    .reasons-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .reason-box {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 20px 16px;
+      text-align: center;
+      border: 1px solid #ffccd5;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+
+    .reason-box:hover {
+      transform: translateY(-4px);
+    }
+
+    .reason-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .reason-box h4 {
+      color: #c9184a;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .reason-box p {
+      font-size: 0.9rem;
+      color: #6a4c4c;
+    }
+
+    /* Bagian Interaktif Pesta Kembang Api & Hujan Pita */
+    .party-trigger-card {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 230, 240, 0.95));
+      border: 2px dashed #ff758f;
+      border-radius: 28px;
+      padding: 32px 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 12px 30px rgba(255, 107, 139, 0.15);
+    }
+
+    .party-trigger-card h3 {
+      font-family: 'Playfair Display', serif;
+      color: #c9184a;
+      font-size: 1.55rem;
+      margin-bottom: 8px;
+    }
+
+    .party-trigger-card p {
+      color: #6a040f;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .party-btn {
+      background: linear-gradient(135deg, #ff4d6d, #ff758f, #ffb3c1);
+      color: #ffffff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 36px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 77, 109, 0.45);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      animation: pulseBtn 2s infinite;
+    }
+
+    .party-btn:hover {
+      transform: scale(1.07);
+      box-shadow: 0 12px 30px rgba(255, 77, 109, 0.6);
+    }
+
+    .party-btn:active {
+      transform: scale(0.96);
+    }
+
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #a4133c;
+      padding: 20px 0;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 12px;
+      border: 4px solid #fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music Element -->
+  <audio id="bg-audio" loop preload="auto">
+    <source src="lagu.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- SCREEN 1: Amplop Pembuka -->
+  <section id="envelope-screen">
+    <div style="font-size: 2.2rem; margin-bottom: 5px;">🌸💌✨</div>
+    <h2 style="font-family: 'Playfair Display', serif; color: #a4133c; font-size: 1.85rem;">Ada Surat Spesial Buat Anicaa!</h2>
+    <p style="color: #6a040f; margin-top: 6px;">Klik amplopnya yaa seng...</p>
+    
+    <div class="envelope-box" onclick="openLetter()">
+      <div class="envelope-flap" id="envelopeFlap"></div>
+      <div class="envelope-seal">💖</div>
+    </div>
+    
+    <div class="tap-hint">👆 Buka Disini Sayangg ✨</div>
+  </section>
+
+  <!-- Floating Audio Controls -->
+  <div class="music-bar" id="musicBar" style="display: none;">
+    <div class="disc-icon" id="discIcon">🎵</div>
+    <span style="font-size: 0.85rem; font-weight: 700; color: #a4133c;">Music</span>
+    <button class="music-btn" onclick="toggleAudio()" title="Play / Pause">▶️</button>
+  </div>
+
+  <!-- SCREEN 2: Konten Utama Website -->
+  <main class="main-wrapper" id="mainWrapper">
+    
+    <!-- Hero Card -->
+    <header class="header-card">
+      <span class="date-badge">✨ 17 OKTOBER • HARINYA ANISAA ✨</span>
+      <h1 class="hero-title">Happy Birthday, Sayangg! 🎉💖</h1>
+      <p class="hero-subtitle">Selamat bertambah usia myQueenn ~</p>
+    </header>
+
+    <!-- Tiup Lilin Interaktif Versi Estetik -->
+    <section class="cake-section-deluxe">
+      <h3 class="cake-title">Make a Wish Dulu Sayangg! 🎂✨</h3>
+      <p class="cake-desc">Pejamkan mata, sebutin semua doa terbaik kamu, terus tiup lilinnya yaa sengg!</p>
+
+      <!-- Wadah Kue CSS -->
+      <div class="deluxe-cake-stage" onclick="blowCandle()">
+        <div class="plate"></div>
+        <div class="layer layer-bottom">
+          <div class="icing"></div>
+          <div class="drip drip1"></div>
+          <div class="drip drip2"></div>
+          <div class="drip drip3"></div>
+        </div>
+        <div class="layer layer-top">
+          <div class="icing"></div>
+          <div class="cherry">🍒</div>
+        </div>
+        
+        <!-- Lilin & Api -->
+        <div class="candle">
+          <div class="flame" id="candleFlame"></div>
+          <div class="smoke" id="candleSmoke"></div>
+        </div>
+      </div>
+
+      <div class="wish-banner" id="wishText">
+        👆 Ketuk kuenya buat tiup lilinnya yaa sayangg! 🕯️
+      </div>
+      <button class="relight-btn" id="relightBtn" onclick="relightCandle(event)">Nyalain Lilinnya Lagi ✨</button>
+    </section>
+
+    <!-- Polaroid Gallery -->
+    <h2 class="gallery-title">Potret Cantiknya Anicaa 📸✨</h2>
+    <div class="gallery-grid">
+      
+      <!-- Foto 1: Jaket Biru & Pose Peace Manis -->
+      <div class="polaroid" onclick="showLightbox('foto1.jpg')">
+        <div class="tape"></div>
+        <img src="foto1.jpg" alt="Anisa Lucu Banget" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80';" />
+        <div class="polaroid-caption">Senyum paling cutee seduniaa ✌️💙</div>
+      </div>
+
+      <!-- Foto 2: Selfie Manis Senyum Bikin Salting -->
+      <div class="polaroid" onclick="showLightbox('foto2.jpg')">
+        <div class="tape"></div>
+        <img src="foto2.jpg" alt="Anisa Manis" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80';" />
+        <div class="polaroid-caption">Tatapannya selalu bikin salting tiap harii 🥰✨</div>
+      </div>
+
+      <!-- Foto 3: Baju Kuning Cantik di Cable Car -->
+      <div class="polaroid" onclick="showLightbox('foto3.jpg')">
+        <div class="tape"></div>
+        <img src="foto3.jpg" alt="Anisa Cantik Banget" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80';" />
+        <div class="polaroid-caption">Cantikknyaa bidadariku di atas awann 💛☁️</div>
+      </div>
+
+    </div>
+
+    <!-- Surat Ucapan Penuh Cinta -->
+    <article class="letter-card">
+      <h3>Haloo Sayangggku, Anisa... 💖</h3>
+      <p>
+        Selamat ulang tahun yaa senggg! 🎉🎂✨ Hari ini hari yang paling spesial bangett, karena di tanggal 17 Oktober ini, orang yang paling baik, paling cantik, dan paling aku sayang dilahirkan ke dunia.
+      </p>
+      <p>
+        Makasihh banyak yaa sayangg udah selalu hadir, nemenin hari-hariku, selalu ngesupport aku, dan selalu sabar sama aku. Kamu itu alasan kenapa hari-hari beratku bisa terasa lebih ringann!
+      </p>
+      <p>
+        Di usiamu yang baru ini, doaku buat kamu semoga kamu selalu diberikan kesehatan, dilancarkan semua urusan dan cita-citanya, selalu dikelilingi kebahagiaan, dan makin sayang sama aku tentunyaa, hehe 🙈.
+      </p>
+      <p>
+        Jangan pernah ngerasa sendirian yaa seng, ada aku yang bakal selalu support dan jagain kamu terus. Tetap jadi orang yang ceria, manis, dan ngegemesin kayak biasanya yaa!
+      </p>
+      <p style="font-weight: bold; color: #a4133c;">
+        I love you so much, more than words could ever say, sayangg! 🌸💖
+      </p>
+      <div class="signature">Dari yang selalu sayang kamu ❤️</div>
+    </article>
+
+    <!-- Reasons Section -->
+    <h3 style="text-align: center; font-family: 'Playfair Display', serif; color: #800f2f; margin-bottom: 20px;">
+      Kenapa Aku Sayang Banget Sama Kamu? ✨
+    </h3>
+    <div class="reasons-container">
+      <div class="reason-box">
+        <div class="reason-icon">🥰</div>
+        <h4>Tawa Candamu</h4>
+        <p>Tawa candamu itu obat paling ampuh kalau hariku lagi capek, bikin plong bangett!</p>
+      </div>
+      <div class="reason-box">
+        <div class="reason-icon">💖</div>
+        <h4>Hatinya Tulus</h4>
+        <p>Cara kamu perhatian dan peduli selalu bikin aku ngerasa beruntung punya kamu sengg.</p>
+      </div>
+      <div class="reason-box">
+        <div class="reason-icon">✨</div>
+        <h4>Selalu Jadi Diri Sendiri</h4>
+        <p>Tingkah lucunya, ketawanya, semuanya selalu berhasil bikin aku jatuh cinta berkali-kali!</p>
+      </div>
+    </div>
+
+    <!-- Tombol Rayakan: Kembang Api & Hujan Pita -->
+    <section class="party-trigger-card">
+      <h3>Rayain lagi yuu sengg! 🎆🎀</h3>
+      <p>Klik tombol di bawah ini yaa sengg!</p>
+      <button class="party-btn" onclick="triggerFireworksAndRibbons()">
+        <span>🎆</span> KLIK DISINII! <span>🎀</span>
+      </button>
+    </section>
+
+    <footer>
+      Dibuat dengan segenap cinta untuk myBeloved Girl (Anisa) 💖✨ • 17 Oktober
+    </footer>
+
+  </main>
+
+  <!-- Lightbox Modal for Photo Zoom -->
+  <div class="lightbox" id="lightboxModal" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Zoom Foto">
+  </div>
+
+  <script>
+    // Inisialisasi Kelopak Bunga & Hati Melayang
+    function createHearts() {
+      const symbols = ['🌸', '💖', '✨', '💕', '🌷'];
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.classList.add('heart-bg');
+        heart.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        heart.style.fontSize = (Math.random() * 14 + 14) + 'px';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 7000);
+      }, 450);
+    }
+    createHearts();
+
+    // Buka Surat & Mainkan Musik
+    let candleIsBlown = false;
+    const audio = document.getElementById('bg-audio');
+    const discIcon = document.getElementById('discIcon');
+
+    function openLetter() {
+      document.getElementById('envelopeFlap').style.transform = 'rotateX(180deg)';
+      
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        const screen = document.getElementById('envelope-screen');
+        screen.style.opacity = '0';
+        setTimeout(() => {
+          screen.style.display = 'none';
+          const main = document.getElementById('mainWrapper');
+          main.classList.add('show');
+          document.getElementById('musicBar').style.display = 'flex';
+          startAudio();
+        }, 600);
+      }, 400);
+    }
+
+    // Pemutar Audio yang Fleksibel (File MP3 & Synth Backup Otomatis)
+    let audioContext = null;
+
+    function startAudio() {
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          discIcon.classList.add('playing');
+        }).catch(() => {
+          playSynthMelody();
+          discIcon.classList.add('playing');
+        });
+      }
+    }
+
+    function toggleAudio() {
+      if (!audio.paused) {
+        audio.pause();
+        discIcon.classList.remove('playing');
+      } else {
+        audio.play().then(() => {
+          discIcon.classList.add('playing');
+        }).catch(() => {
+          playSynthMelody();
+          discIcon.classList.add('playing');
+        });
+      }
+    }
+
+    // Melodi Romantis Web Audio API
+    function playSynthMelody() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const notes = [261.63, 329.63, 392.00, 523.25, 493.88, 392.00, 329.63, 261.63];
+      let step = 0;
+      setInterval(() => {
+        if (discIcon.classList.contains('playing')) {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(notes[step % notes.length], audioContext.currentTime);
+          gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1.2);
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+          osc.start();
+          osc.stop(audioContext.currentTime + 1.2);
+          step++;
+        }
+      }, 700);
+    }
+
+    // Meniup Lilin Deluxe
+    function blowCandle() {
+      if (candleIsBlown) return;
+      candleIsBlown = true;
+
+      const flame = document.getElementById('candleFlame');
+      const smoke = document.getElementById('candleSmoke');
+      const wishText = document.getElementById('wishText');
+      const relightBtn = document.getElementById('relightBtn');
+
+      flame.classList.add('blown');
+      smoke.classList.add('active');
+      setTimeout(() => smoke.classList.remove('active'), 1200);
+
+      wishText.innerHTML = "Yeeaaayy! Lilinnya padam! 🥳 Semua harapan dan cita-citamuu semoga dikabulkan yaa senggg! Aamiinn! 💖🤲";
+      relightBtn.style.display = 'inline-block';
+
+      const duration = 3.5 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 60,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 60,
+          origin: { x: 1 }
+        });
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+    }
+
+    // Nyalakan Lilin Kembali
+    function relightCandle(e) {
+      e.stopPropagation();
+      candleIsBlown = false;
+      document.getElementById('candleFlame').classList.remove('blown');
+      document.getElementById('wishText').innerHTML = "Lilinnya nyala lagii! Mau tiup sekali lagi sengg? 🕯️✨";
+      document.getElementById('relightBtn').style.display = 'none';
+    }
+
+    // Fitur Klik Kembang Api & Hujan Pita Spektakuler
+    function triggerFireworksAndRibbons() {
+      const duration = 4.5 * 1000;
+      const animationEnd = Date.now() + duration;
+      const colors = ['#ff4d6d', '#ff758f', '#ffccd5', '#ffd166', '#06d6a0', '#118ab2', '#b5179e', '#ffffff'];
+
+      // Efek Hujan Pita & Confetti Streamers dari Atas
+      confetti({
+        particleCount: 60,
+        spread: 100,
+        origin: { y: 0.1 },
+        colors: colors,
+        shapes: ['circle', 'square'],
+        scalar: 1.4,
+        drift: 0.2
+      });
+
+      // Tembakan Kembang Api Berulang di Berbagai Sudut Layar
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        // Tembakan kembang api acak
+        confetti({
+          particleCount: 35,
+          startVelocity: 30,
+          spread: 360,
+          ticks: 70,
+          origin: {
+            x: Math.random() * 0.8 + 0.1,
+            y: Math.random() * 0.5 + 0.1
+          },
+          colors: colors,
+          scalar: 1.2
+        });
+
+        // Semburan pita warna-warni dari kanan dan kiri bawah
+        confetti({
+          particleCount: 20,
+          angle: 60,
+          spread: 75,
+          origin: { x: 0, y: 0.9 },
+          colors: colors,
+          scalar: 1.3
+        });
+        confetti({
+          particleCount: 20,
+          angle: 120,
+          spread: 75,
+          origin: { x: 1, y: 0.9 },
+          colors: colors,
+          scalar: 1.3
+        });
+      }, 350);
+    }
+
+    // Modal Zoom Foto (Lightbox)
+    function showLightbox(src) {
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxModal').classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightboxModal').classList.remove('active');
+    }
+  </script>
+</body>
+</html>
